@@ -49,9 +49,9 @@ class CollectionTest extends TestCase
     public function testColumn(): void
     {
         $collection = new Collection([
-                                         ['id' => 1, 'name' => 'John'],
-                                         ['id' => 2, 'name' => 'Jane']
-                                     ]);
+            ['id' => 1, 'name' => 'John'],
+            ['id' => 2, 'name' => 'Jane']
+        ]);
         $this->assertEquals([1, 2], $collection->column('id'));
     }
 
@@ -382,8 +382,8 @@ class CollectionTest extends TestCase
     public function testReplace(): void
     {
         $collection = new Collection([1, 2, 3]);
-        $collection->replace([2 => 4, 3 => 5]);
-        $this->assertEquals([1, 2, 4, 5], $collection->items());
+        $collection->replace([4, 5]);
+        $this->assertEquals([4, 5, 3], $collection->items());
     }
 
     public function testReplaceRecursive(): void

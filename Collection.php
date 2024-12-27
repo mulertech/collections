@@ -1,14 +1,15 @@
 <?php
 
 namespace MulerTech\Collections;
+
 class Collection
 {
     public function __construct(private array $items = [])
     {}
 
-    public function all(callable $callable): bool
+    public function all(callable $callback): bool
     {
-        return array_all($this->items, $callable);
+        return array_all($this->items, $callback);
     }
 
     public function any(callable $callback): bool
