@@ -1,7 +1,9 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+namespace MulerTech\Collections\Tests;
+
 use MulerTech\Collections\Collection;
+use PHPUnit\Framework\TestCase;
 
 class CollectionTest extends TestCase
 {
@@ -43,7 +45,12 @@ class CollectionTest extends TestCase
     {
         $collection = new Collection([1, 2, 3, 4]);
         $chunks = $collection->chunk(2);
-        $this->assertEquals([[1, 2], [3, 4]], $chunks);
+        $this->assertEquals(
+            [new Collection([1, 2]), new Collection([3, 4])],
+            $chunks->items()
+        );
+        $noChunk = $collection->chunk(0);
+        $this->assertEquals([], $noChunk->items());
     }
 
     public function testColumn(): void
@@ -52,14 +59,13 @@ class CollectionTest extends TestCase
             ['id' => 1, 'name' => 'John'],
             ['id' => 2, 'name' => 'Jane']
         ]);
-        $this->assertEquals([1, 2], $collection->column('id'));
+        $this->assertEquals([1, 2], $collection->column('id')->items());
     }
 
     public function testCombine(): void
     {
-        $collection = new Collection();
-        $collection->combine(['a', 'b'], [1, 2]);
-        $this->assertEquals(['a' => 1, 'b' => 2], $collection->items());
+        $collection = new Collection(['a', 'b']);
+        $this->assertEquals(['a' => 1, 'b' => 2], $collection->combine(new Collection([1, 2]))->items());
     }
 
     public function testCount(): void
@@ -71,7 +77,9 @@ class CollectionTest extends TestCase
     public function testCountValues(): void
     {
         $collection = new Collection([1, 1, 2, 3, 3, 3]);
-        $this->assertEquals([1 => 2, 2 => 1, 3 => 3], $collection->countValues());
+        $this->assertEquals([1 => 2, 2 => 1, 3 => 3], $collection->countValues()->items());
+        $collection = new Collection(['a', 'b', 'b', 'c']);
+        $this->assertEquals(['a' => 1, 'b' => 2, 'c' => 1], $collection->countValues()->items());
     }
 
     public function testCurrent(): void
@@ -83,36 +91,36 @@ class CollectionTest extends TestCase
     public function testDiff(): void
     {
         $collection = new Collection([1, 2, 3]);
-        $diff = $collection->diff([2, 3, 4]);
-        $this->assertEquals([0 => 1], $diff);
+        $diff = $collection->diff(new Collection([2, 3, 4]));
+        $this->assertEquals([0 => 1], $diff->items());
     }
 
     public function testDiffAssoc(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $diff = $collection->diffAssoc(['a' => 1, 'b' => 3]);
-        $this->assertEquals(['b' => 2], $diff);
+        $diff = $collection->diffAssoc(new Collection(['a' => 1, 'b' => 3]));
+        $this->assertEquals(['b' => 2], $diff->items());
     }
 
     public function testDiffKey(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $diff = $collection->diffKey(['a' => 3]);
-        $this->assertEquals(['b' => 2], $diff);
+        $diff = $collection->diffKey(new Collection(['a' => 3]));
+        $this->assertEquals(['b' => 2], $diff->items());
     }
 
     public function testDiffUassoc(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $diff = $collection->diffUassoc(fn($a, $b) => $a <=> $b, ['a' => 1, 'b' => 3]);
-        $this->assertEquals(['b' => 2], $diff);
+        $diff = $collection->diffUassoc(fn($a, $b) => $a <=> $b, new Collection(['a' => 1, 'b' => 3]));
+        $this->assertEquals(['b' => 2], $diff->items());
     }
 
     public function testDiffUkey(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $diff = $collection->diffUkey(fn($a, $b) => $a <=> $b, ['a' => 3]);
-        $this->assertEquals(['b' => 2], $diff);
+        $diff = $collection->diffUkey(fn($a, $b) => $a <=> $b, new Collection(['a' => 3]));
+        $this->assertEquals(['b' => 2], $diff->items());
     }
 
     public function testEnd(): void
@@ -130,15 +138,16 @@ class CollectionTest extends TestCase
     public function testFill(): void
     {
         $collection = new Collection();
-        $collection->fill(0, 3, 'a');
-        $this->assertEquals(['a', 'a', 'a'], $collection->items());
+        $this->assertEquals(['a', 'a', 'a'], $collection->fill(0, 3, 'a')->items());
     }
 
     public function testFillKeys(): void
     {
         $collection = new Collection();
-        $collection->fillKeys(['a', 'b'], 'value');
-        $this->assertEquals(['a' => 'value', 'b' => 'value'], $collection->items());
+        $this->assertEquals(
+            ['a' => 'value', 'b' => 'value'],
+            $collection->fillKeys(['a', 'b'], 'value')->items()
+        );
     }
 
     public function testFilter(): void
@@ -163,8 +172,7 @@ class CollectionTest extends TestCase
     public function testFlip(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $collection->flip();
-        $this->assertEquals([1 => 'a', 2 => 'b'], $collection->items());
+        $this->assertEquals([1 => 'a', 2 => 'b'], $collection->flip()->items());
     }
 
     public function testInArray(): void
@@ -177,36 +185,36 @@ class CollectionTest extends TestCase
     public function testIntersect(): void
     {
         $collection = new Collection([1, 2, 3]);
-        $intersect = $collection->intersect([2, 3, 4]);
-        $this->assertEquals([1 => 2, 2 => 3], $intersect);
+        $intersect = $collection->intersect(new Collection([2, 3, 4]));
+        $this->assertEquals([1 => 2, 2 => 3], $intersect->items());
     }
 
     public function testIntersectAssoc(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $intersect = $collection->intersectAssoc(['a' => 1, 'b' => 3]);
-        $this->assertEquals(['a' => 1], $intersect);
+        $intersect = $collection->intersectAssoc(new Collection(['a' => 1, 'b' => 3]));
+        $this->assertEquals(['a' => 1], $intersect->items());
     }
 
     public function testIntersectKey(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $intersect = $collection->intersectKey(['a' => 3]);
-        $this->assertEquals(['a' => 1], $intersect);
+        $intersect = $collection->intersectKey(new Collection(['a' => 3]));
+        $this->assertEquals(['a' => 1], $intersect->items());
     }
 
     public function testIntersectUassoc(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $intersect = $collection->intersectUassoc(fn($a, $b) => $a <=> $b, ['a' => 1, 'b' => 3]);
-        $this->assertEquals(['a' => 1], $intersect);
+        $intersect = $collection->intersectUassoc(fn($a, $b) => $a <=> $b, new Collection(['a' => 1, 'b' => 3]));
+        $this->assertEquals(['a' => 1], $intersect->items());
     }
 
     public function testIntersectUkey(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $intersect = $collection->intersectUkey(fn($a, $b) => $a <=> $b, ['a' => 3]);
-        $this->assertEquals(['a' => 1], $intersect);
+        $intersect = $collection->intersectUkey(fn($a, $b) => $a <=> $b, new Collection(['a' => 3]));
+        $this->assertEquals(['a' => 1], $intersect->items());
     }
 
     public function testIsList(): void
@@ -251,9 +259,9 @@ class CollectionTest extends TestCase
     public function testKeys(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $this->assertEquals(['a', 'b'], $collection->keys());
-        $this->assertEquals(['a'], $collection->keys('1'));
-        $this->assertEquals(['b'], $collection->keys(2, true));
+        $this->assertEquals(['a', 'b'], $collection->keys()->items());
+        $this->assertEquals(['a'], $collection->keys('1')->items());
+        $this->assertEquals(['b'], $collection->keys(2, true)->items());
     }
 
     public function testKrsort(): void
@@ -280,14 +288,14 @@ class CollectionTest extends TestCase
     public function testMerge(): void
     {
         $collection = new Collection([1, 2]);
-        $collection->merge([3, 4]);
+        $collection->merge(new Collection([3, 4]));
         $this->assertEquals([1, 2, 3, 4], $collection->items());
     }
 
     public function testMergeRecursive(): void
     {
         $collection = new Collection(['a' => 1, 'b' => ['x' => 2]]);
-        $collection->mergeRecursive(['b' => ['y' => 3], 'c' => 4]);
+        $collection->mergeRecursive(new Collection(['b' => ['y' => 3], 'c' => 4]));
         $this->assertEquals(['a' => 1, 'b' => ['x' => 2, 'y' => 3], 'c' => 4], $collection->items());
     }
 
@@ -322,6 +330,36 @@ class CollectionTest extends TestCase
     {
         $collection = new Collection([1, 2, 3]);
         $this->assertEquals(2, $collection->next());
+    }
+
+    public function testOffsetExists(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+        $this->assertTrue($collection->offsetExists(1));
+        $this->assertFalse($collection->offsetExists(3));
+    }
+
+    public function testOffsetGet(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+        $this->assertEquals(2, $collection->offsetGet(1));
+    }
+
+    public function testOffsetSet(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+        $collection->offsetSet(1, 4);
+        $this->assertEquals([1, 4, 3], $collection->items());
+        $collection = new Collection([1, 2, 3]);
+        $collection->offsetSet(null, 4);
+        $this->assertEquals([1, 2, 3, 4], $collection->items());
+    }
+
+    public function testOffsetUnset(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+        $collection->offsetUnset(1);
+        $this->assertEquals([0 => 1, 2 => 3], $collection->items());
     }
 
     public function testPad(): void
@@ -368,8 +406,7 @@ class CollectionTest extends TestCase
     public function testRange(): void
     {
         $collection = new Collection();
-        $collection->range(1, 3);
-        $this->assertEquals([1, 2, 3], $collection->items());
+        $this->assertEquals([1, 2, 3], $collection->range(1, 3)->items());
     }
 
     public function testReduce(): void
@@ -382,14 +419,14 @@ class CollectionTest extends TestCase
     public function testReplace(): void
     {
         $collection = new Collection([1, 2, 3]);
-        $collection->replace([4, 5]);
+        $collection->replace(new Collection([4, 5]));
         $this->assertEquals([4, 5, 3], $collection->items());
     }
 
     public function testReplaceRecursive(): void
     {
         $collection = new Collection(['a' => 1, 'b' => ['x' => 2]]);
-        $collection->replaceRecursive(['b' => ['y' => 3], 'c' => 4]);
+        $collection->replaceRecursive(new Collection(['b' => ['y' => 3], 'c' => 4]));
         $this->assertEquals(['a' => 1, 'b' => ['y' => 3, 'x' => 2], 'c' => 4], $collection->items());
     }
 
@@ -439,7 +476,7 @@ class CollectionTest extends TestCase
     {
         $collection = new Collection([1, 2, 3, 4]);
         $slice = $collection->slice(1, 2);
-        $this->assertEquals([2, 3], $slice);
+        $this->assertEquals([2, 3], $slice->items());
     }
 
     public function testSort(): void
@@ -477,36 +514,40 @@ class CollectionTest extends TestCase
     public function testUdiff(): void
     {
         $collection = new Collection([1, 2, 3]);
-        $diff = $collection->udiff(fn($a, $b) => $a <=> $b, [2, 3, 4]);
-        $this->assertEquals([0 => 1], $diff);
+        $diff = $collection->udiff(fn($a, $b) => $a <=> $b, new Collection([2, 3, 4]));
+        $this->assertEquals([0 => 1], $diff->items());
     }
 
     public function testUdiffAssoc(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $diff = $collection->udiffAssoc(fn($a, $b) => $a <=> $b, ['a' => 1, 'b' => 3]);
-        $this->assertEquals(['b' => 2], $diff);
+        $diff = $collection->udiffAssoc(fn($a, $b) => $a <=> $b, new Collection(['a' => 1, 'b' => 3]));
+        $this->assertEquals(['b' => 2], $diff->items());
     }
 
     public function testUdiffUassoc(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $diff = $collection->udiffUassoc(fn($a, $b) => $a <=> $b, fn($a, $b) => $a <=> $b, ['a' => 1, 'b' => 3]);
-        $this->assertEquals(['b' => 2], $diff);
+        $diff = $collection->udiffUassoc(
+            fn($a, $b) => $a <=> $b,
+            fn($a, $b) => $a <=> $b,
+            new Collection(['a' => 1, 'b' => 3])
+        );
+        $this->assertEquals(['b' => 2], $diff->items());
     }
 
     public function testUintersect(): void
     {
         $collection = new Collection([1, 2, 3]);
-        $intersect = $collection->uintersect(fn($a, $b) => $a <=> $b, [2, 3, 4]);
-        $this->assertEquals([1 => 2, 2 => 3], $intersect);
+        $intersect = $collection->uintersect(fn($a, $b) => $a <=> $b, new Collection([2, 3, 4]));
+        $this->assertEquals([1 => 2, 2 => 3], $intersect->items());
     }
 
     public function testUintersertAssoc(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $intersect = $collection->uintersectAssoc(fn($a, $b) => $a <=> $b, ['a' => 1, 'b' => 3]);
-        $this->assertEquals(['a' => 1], $intersect);
+        $intersect = $collection->uintersectAssoc(fn($a, $b) => $a <=> $b, new Collection(['a' => 1, 'b' => 3]));
+        $this->assertEquals(['a' => 1], $intersect->items());
     }
 
     public function testUintersertUassoc(): void
@@ -515,9 +556,9 @@ class CollectionTest extends TestCase
         $intersect = $collection->uintersectUassoc(
             fn($a, $b) => $a <=> $b,
             fn($a, $b) => $a <=> $b,
-            ['a' => 1, 'b' => 3]
+            new Collection(['a' => 1, 'b' => 3])
         );
-        $this->assertEquals(['a' => 1], $intersect);
+        $this->assertEquals(['a' => 1], $intersect->items());
     }
 
     public function testUksort(): void
@@ -551,7 +592,7 @@ class CollectionTest extends TestCase
     public function testValues(): void
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
-        $this->assertEquals([1, 2], $collection->values());
+        $this->assertEquals([1, 2], $collection->values()->items());
     }
 
     public function testWalk(): void
