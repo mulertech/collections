@@ -1,5 +1,6 @@
 .idea
 .phpunit.cache
 vendor
-.env.test
+.php-cs-fixer.cache
 composer.lock
+mt-compose.yml
