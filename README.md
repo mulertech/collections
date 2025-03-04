@@ -107,6 +107,13 @@ $collection->combine(['a', 'b'], [1, 2]);
 $collection->items(); // ['a' => 1, 'b' => 2]
 ```
 
+contains(mixed $value): bool : Checks if a value exists in the collection.
+
+```php
+$collection = new Collection([1, 2, 3]);
+$collection->contains(2); // true
+```
+
 count(int $mode = COUNT_NORMAL): int : Counts the number of items in the collection.
 
 ```php
