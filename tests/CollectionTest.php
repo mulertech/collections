@@ -608,4 +608,20 @@ class CollectionTest extends TestCase
         $collection->walkRecursive(fn(&$item) => $item *= 2);
         $this->assertEquals(['a' => 2, 'b' => ['x' => 4]], $collection->items());
     }
+
+    public function testContainsWithStringValues(): void
+    {
+        $collection = new Collection(['apple', 'banana', 'cherry']);
+        $this->assertTrue($collection->contains('banana'));
+        $this->assertFalse($collection->contains('grape'));
+    }
+
+    public function testContainsWithObjectValues(): void
+    {
+        $object1 = (object)['id' => 1, 'name' => 'John'];
+        $object2 = (object)['id' => 2, 'name' => 'Jane'];
+        $collection = new Collection([$object1, $object2]);
+        $this->assertTrue($collection->contains($object1));
+        $this->assertFalse($collection->contains((object)['id' => 3, 'name' => 'Doe']));
+    }
 }
