@@ -859,15 +859,6 @@ class Collection implements ArrayAccess
      */
     public function contains(mixed $value): bool
     {
-        foreach ($this->items as $item) {
-            if (is_object($item) && is_object($value)) {
-                if ($item == $value) {
-                    return true;
-                }
-            } elseif ($item === $value) {
-                return true;
-            }
-        }
-        return false;
+        return in_array($value, $this->items, true);
     }
 }
