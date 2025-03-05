@@ -110,6 +110,15 @@ class Collection implements ArrayAccess
     }
 
     /**
+     * @param mixed $value
+     * @return bool
+     */
+    public function contains(mixed $value): bool
+    {
+        return in_array($value, $this->items, true);
+    }
+
+    /**
      * @param 0|1 $mode
      * @return int
      */
@@ -851,14 +860,5 @@ class Collection implements ArrayAccess
     public function walkRecursive(callable $callback, mixed $arg = null): void
     {
         array_walk_recursive($this->items, $callback, $arg);
-    }
-
-    /**
-     * @param mixed $value
-     * @return bool
-     */
-    public function contains(mixed $value): bool
-    {
-        return in_array($value, $this->items, true);
     }
 }
