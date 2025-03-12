@@ -452,6 +452,13 @@ $collection = new Collection([1, 2, 3]);
 $collection->reduce(fn ($carry, $item) => $carry + $item); // 6
 ```
 
+remove(int|string $key): void : Removes an item from the collection by its key.
+
+```php
+$collection = new Collection([1, 2, 3]);
+$collection->remove(1); // [1, 3]
+```
+
 replace(array ...$replacements): void : Replaces the items in the collection with the items from the provided arrays.
 
 ```php

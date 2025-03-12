@@ -432,6 +432,15 @@ class CollectionTest extends TestCase
         $this->assertEquals(6, $sum);
     }
 
+    public function testRemove(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+        $collection->remove(1);
+        $this->assertEquals([0 => 1, 2 => 3], $collection->items());
+        // Test removing a non-existent key
+        $collection->remove(1);
+    }
+
     public function testReplace(): void
     {
         $collection = new Collection([1, 2, 3]);

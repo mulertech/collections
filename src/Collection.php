@@ -613,6 +613,19 @@ class Collection implements ArrayAccess
     }
 
     /**
+     * @param int|string $key
+     * @return void
+     */
+    public function remove(int|string $key): void
+    {
+        if (!array_key_exists($key, $this->items)) {
+            return;
+        }
+
+        unset($this->items[$key]);
+    }
+
+    /**
      * @param self<TKey, TValue> ...$collections
      * @return void
      */
