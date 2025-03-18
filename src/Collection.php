@@ -3,6 +3,9 @@
 namespace MulerTech\Collections;
 
 use ArrayAccess;
+use ArrayIterator;
+use IteratorAggregate;
+use Traversable;
 
 /**
  * Class Collection
@@ -12,7 +15,7 @@ use ArrayAccess;
  * @template TValue of mixed
  * @implements ArrayAccess<TKey, TValue>
  */
-class Collection implements ArrayAccess
+class Collection implements ArrayAccess, IteratorAggregate
 {
     /**
      * @param array<TKey, TValue> $items
@@ -81,7 +84,7 @@ class Collection implements ArrayAccess
 
         return new self(
             array_map(
-                fn ($chunk) => new self($chunk),
+                static fn ($chunk) => new self($chunk),
                 $chunks
             )
         );
@@ -149,7 +152,9 @@ class Collection implements ArrayAccess
      */
     public function diff(self ...$collections): self
     {
-        return new self(array_diff($this->items, ...array_map(fn ($collection) => $collection->items, $collections)));
+        return new self(
+            array_diff($this->items, ...array_map(static fn ($collection) => $collection->items, $collections))
+        );
     }
 
     /**
@@ -161,7 +166,7 @@ class Collection implements ArrayAccess
         return new self(
             array_diff_assoc(
                 $this->items,
-                ...array_map(fn ($collection) => $collection->items, $collections)
+                ...array_map(static fn ($collection) => $collection->items, $collections)
             )
         );
     }
@@ -175,7 +180,7 @@ class Collection implements ArrayAccess
         return new self(
             array_diff_key(
                 $this->items,
-                ...array_map(fn ($collection) => $collection->items, $collections)
+                ...array_map(static fn ($collection) => $collection->items, $collections)
             )
         );
     }
@@ -275,6 +280,11 @@ class Collection implements ArrayAccess
         return new self(array_flip($this->items));
     }
 
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->items);
+    }
+
     /**
      * @param mixed $needle
      * @param bool $strict
@@ -294,7 +304,7 @@ class Collection implements ArrayAccess
         return new self(
             array_intersect(
                 $this->items,
-                ...array_map(fn ($collection) => $collection->items(), $collections)
+                ...array_map(static fn ($collection) => $collection->items(), $collections)
             )
         );
     }
@@ -308,7 +318,7 @@ class Collection implements ArrayAccess
         return new self(
             array_intersect_assoc(
                 $this->items,
-                ...array_map(fn ($collection) => $collection->items(), $collections)
+                ...array_map(static fn ($collection) => $collection->items(), $collections)
             )
         );
     }
@@ -322,7 +332,7 @@ class Collection implements ArrayAccess
         return new self(
             array_intersect_key(
                 $this->items,
-                ...array_map(fn ($collection) => $collection->items(), $collections)
+                ...array_map(static fn ($collection) => $collection->items(), $collections)
             )
         );
     }
@@ -438,7 +448,7 @@ class Collection implements ArrayAccess
         $this->items = array_map(
             $callback,
             $this->items,
-            ...array_map(fn ($collection) => $collection->items(), $collections)
+            ...array_map(static fn ($collection) => $collection->items(), $collections)
         );
     }
 
@@ -448,7 +458,10 @@ class Collection implements ArrayAccess
      */
     public function merge(self ...$collections): void
     {
-        $this->items = array_merge($this->items, ...array_map(fn ($collection) => $collection->items(), $collections));
+        $this->items = array_merge(
+            $this->items,
+            ...array_map(static fn ($collection) => $collection->items(), $collections)
+        );
     }
 
     /**
@@ -459,7 +472,7 @@ class Collection implements ArrayAccess
     {
         $this->items = array_merge_recursive(
             $this->items,
-            ...array_map(fn ($collection) => $collection->items(), $collections)
+            ...array_map(static fn ($collection) => $collection->items(), $collections)
         );
     }
 
@@ -633,7 +646,7 @@ class Collection implements ArrayAccess
     {
         $this->items = array_replace(
             $this->items,
-            ...array_map(fn ($collection) => $collection->items(), $collections)
+            ...array_map(static fn ($collection) => $collection->items(), $collections)
         );
     }
 
@@ -645,7 +658,7 @@ class Collection implements ArrayAccess
     {
         $this->items = array_replace_recursive(
             $this->items,
-            ...array_map(fn ($collection) => $collection->items(), $collections)
+            ...array_map(static fn ($collection) => $collection->items(), $collections)
         );
     }
 

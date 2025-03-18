@@ -10,7 +10,7 @@ class CollectionTest extends TestCase
     public function testAll(): void
     {
         $collection = new Collection([1, 2, 3]);
-        $this->assertEquals(true, $collection->all(fn($item) => $item <= 3));
+        $this->assertTrue($collection->all(fn($item) => $item <= 3));
     }
 
     public function testAny(): void
@@ -189,6 +189,19 @@ class CollectionTest extends TestCase
     {
         $collection = new Collection(['a' => 1, 'b' => 2]);
         $this->assertEquals([1 => 'a', 2 => 'b'], $collection->flip()->items());
+    }
+
+    public function testGetIteratorForUseForeach(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+        $result = [];
+        foreach ($collection as $key => $value) {
+            $result[] = "Key: $key, Value: $value";
+        }
+        $this->assertEquals(
+            ['Key: 0, Value: 1', 'Key: 1, Value: 2', 'Key: 2, Value: 3'],
+            $result
+        );
     }
 
     public function testInArray(): void

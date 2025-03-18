@@ -230,6 +230,19 @@ $collection->flip();
 $collection->items(); // [1 => 'a', 2 => 'b']
 ```
 
+getIterator(): Traversable : Returns an external iterator for the collection, allowing it to be used in foreach loops.
+
+```php
+$collection = new Collection([1, 2, 3]);
+foreach ($collection as $key => $value) {
+    echo "Key: $key, Value: $value\n";
+}
+```
+// Output:
+// Key: 0, Value: 1
+// Key: 1, Value: 2
+// Key: 2, Value: 3
+
 inArray(mixed $needle, bool $strict = false): bool : Checks if a value exists in the collection.
 
 ```php
