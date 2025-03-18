@@ -14,6 +14,7 @@ use Traversable;
  * @template TKey of array-key
  * @template TValue of mixed
  * @implements ArrayAccess<TKey, TValue>
+ * @implements IteratorAggregate<TKey, TValue>
  */
 class Collection implements ArrayAccess, IteratorAggregate
 {
