@@ -454,6 +454,38 @@ class CollectionTest extends TestCase
         $collection->remove(1);
     }
 
+    public function testRemoveItem(): void
+    {
+        // Test with integers
+        $collection = new Collection([1, 2, 3, 2]);
+        $this->assertTrue($collection->removeItem(2));
+        $this->assertEquals([0 => 1, 2 => 3, 3 => 2], $collection->items());
+        
+        // Test with strings
+        $collection = new Collection(['apple', 'banana', 'cherry']);
+        $this->assertTrue($collection->removeItem('banana'));
+        $this->assertEquals([0 => 'apple', 2 => 'cherry'], $collection->items());
+        $this->assertFalse($collection->removeItem('grape'));
+        
+        // Test with objects
+        $obj1 = new \stdClass();
+        $obj1->id = 1;
+        $obj2 = new \stdClass();
+        $obj2->id = 2;
+        $obj3 = new \stdClass();
+        $obj3->id = 3;
+        
+        $collection = new Collection([$obj1, $obj2, $obj3]);
+        $this->assertTrue($collection->removeItem($obj2));
+        $this->assertEquals([0 => $obj1, 2 => $obj3], $collection->items());
+        
+        // Test with non-strict comparison
+        $collection = new Collection([1, '2', 3]);
+        $this->assertFalse($collection->removeItem(2));
+        $this->assertTrue($collection->removeItem(2, false));
+        $this->assertEquals([0 => 1, 2 => 3], $collection->items());
+    }
+
     public function testReplace(): void
     {
         $collection = new Collection([1, 2, 3]);
@@ -647,3 +679,4 @@ class CollectionTest extends TestCase
         $this->assertEquals(['a' => 2, 'b' => ['x' => 4]], $collection->items());
     }
 }
+

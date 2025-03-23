@@ -472,6 +472,23 @@ $collection = new Collection([1, 2, 3]);
 $collection->remove(1); // [1, 3]
 ```
 
+removeItem(mixed $item, bool $strict = true): bool : Removes an item from the collection by its value and returns whether the item was found and removed.
+
+```php
+$collection = new Collection([1, 2, 3]);
+$collection->removeItem(2); // true, collection now contains [1, 3]
+$collection->removeItem(4); // false, collection unchanged
+
+// With objects
+$obj = new stdClass();
+$collection = new Collection([$obj, 'string', 42]);
+$collection->removeItem($obj); // true, removes the object
+
+// Non-strict comparison
+$collection = new Collection([1, '2', 3]);
+$collection->removeItem(2, false); // true, removes '2'
+```
+
 replace(array ...$replacements): void : Replaces the items in the collection with the items from the provided arrays.
 
 ```php
@@ -673,3 +690,4 @@ $collection = new Collection(['a' => 1, 'b' => ['x' => 2]]);
 $collection->walkRecursive(fn (&$item) => $item *= 2);
 $collection->items(); // ['a' => 2, 'b' => ['x' => 4]]
 ```
+`

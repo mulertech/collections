@@ -640,6 +640,23 @@ class Collection implements ArrayAccess, IteratorAggregate
     }
 
     /**
+     * @param mixed $item
+     * @param bool $strict
+     * @return bool
+     */
+    public function removeItem(mixed $item, bool $strict = true): bool
+    {
+        $key = array_search($item, $this->items, $strict);
+        
+        if ($key === false) {
+            return false;
+        }
+        
+        unset($this->items[$key]);
+        return true;
+    }
+
+    /**
      * @param self<TKey, TValue> ...$collections
      * @return void
      */
@@ -889,3 +906,4 @@ class Collection implements ArrayAccess, IteratorAggregate
         array_walk_recursive($this->items, $callback, $arg);
     }
 }
+
