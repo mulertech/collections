@@ -1,5 +1,9 @@
 # Release notes for collections
 
+## v1.0.4 - 2025-03-23
+
+v1.0.4
+
 ## v1.0.3 - 2025-03-18
 
 v1.0.3
