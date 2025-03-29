@@ -4,6 +4,7 @@ namespace MulerTech\Collections\Tests;
 
 use MulerTech\Collections\Collection;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class CollectionTest extends TestCase
 {
@@ -88,6 +89,12 @@ class CollectionTest extends TestCase
     {
         $collection = new Collection([1, 2, 3]);
         $this->assertEquals(3, $collection->count());
+    }
+
+    public function testCountable(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+        $this->assertCount(3, $collection);
     }
 
     public function testCountValues(): void
@@ -468,11 +475,11 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->removeItem('grape'));
         
         // Test with objects
-        $obj1 = new \stdClass();
+        $obj1 = new stdClass();
         $obj1->id = 1;
-        $obj2 = new \stdClass();
+        $obj2 = new stdClass();
         $obj2->id = 2;
-        $obj3 = new \stdClass();
+        $obj3 = new stdClass();
         $obj3->id = 3;
         
         $collection = new Collection([$obj1, $obj2, $obj3]);

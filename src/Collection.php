@@ -6,6 +6,7 @@ use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
 use Traversable;
+use Countable;
 
 /**
  * Class Collection
@@ -15,8 +16,9 @@ use Traversable;
  * @template TValue of mixed
  * @implements ArrayAccess<TKey, TValue>
  * @implements IteratorAggregate<TKey, TValue>
+ * @implements Countable
  */
-class Collection implements ArrayAccess, IteratorAggregate
+class Collection implements ArrayAccess, IteratorAggregate, Countable
 {
     /**
      * @param array<TKey, TValue> $items
@@ -123,12 +125,11 @@ class Collection implements ArrayAccess, IteratorAggregate
     }
 
     /**
-     * @param 0|1 $mode
      * @return int
      */
-    public function count($mode = COUNT_NORMAL): int
+    public function count(): int
     {
-        return count($this->items, $mode);
+        return count($this->items);
     }
 
     /**
