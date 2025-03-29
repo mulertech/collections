@@ -16,7 +16,6 @@ use Countable;
  * @template TValue of mixed
  * @implements ArrayAccess<TKey, TValue>
  * @implements IteratorAggregate<TKey, TValue>
- * @implements Countable
  */
 class Collection implements ArrayAccess, IteratorAggregate, Countable
 {
@@ -648,11 +647,11 @@ class Collection implements ArrayAccess, IteratorAggregate, Countable
     public function removeItem(mixed $item, bool $strict = true): bool
     {
         $key = array_search($item, $this->items, $strict);
-        
+
         if ($key === false) {
             return false;
         }
-        
+
         unset($this->items[$key]);
         return true;
     }
@@ -907,4 +906,3 @@ class Collection implements ArrayAccess, IteratorAggregate, Countable
         array_walk_recursive($this->items, $callback, $arg);
     }
 }
-
