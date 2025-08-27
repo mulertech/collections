@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1743270572">
-  <project timestamp="1743270572">
+<coverage generated="1756285655">
+  <project timestamp="1756285655" name="Clover Coverage">
     <package name="MulerTech\Collections">
-      <file name="/home/runner/work/collections/collections/src/Collection.php">
+      <file name="/var/www/html/src/Collection.php">
         <class name="MulerTech\Collections\Collection" namespace="MulerTech\Collections">
           <metrics complexity="94" methods="89" coveredmethods="89" conditionals="0" coveredconditionals="0" statements="152" coveredstatements="152" elements="241" coveredelements="241"/>
         </class>
