@@ -5,7 +5,7 @@ ___
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/mulertech/collections/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/mulertech/collections/actions/workflows/tests.yml)
 [![GitHub PHPStan Action Status](https://img.shields.io/github/actions/workflow/status/mulertech/collections/phpstan.yml?branch=main&label=phpstan&style=flat-square)](https://github.com/mulertech/collections/actions/workflows/phpstan.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/mulertech/collections.svg?style=flat-square)](https://packagist.org/packages/mulertech/collections)
-[![Test Coverage](https://raw.githubusercontent.com/mulertech/collections/main/badge-coverage.svg)](https://packagist.org/packages/mulertech/collections)
+[![Test Coverage](https://raw.githubusercontent.com/mulertech/collections/badge/badge-coverage.svg)](https://packagist.org/packages/mulertech/collections)
 ___
 
 This is a simple collections package for PHP. It provides a set of methods to work with arrays in a more functional way.

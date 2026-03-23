@@ -34,12 +34,12 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 
     public function arsort(int $sortFlags = SORT_REGULAR): void
     {
-        arsort($this->items, $sortFlags);
+        arsort($this->items, $sortFlags); // @phpstan-ignore argument.type
     }
 
     public function asort(int $sortFlags = SORT_REGULAR): void
     {
-        asort($this->items, $sortFlags);
+        asort($this->items, $sortFlags); // @phpstan-ignore argument.type
     }
 
     public function changeKeyCase(int $case = CASE_LOWER): void
@@ -83,9 +83,9 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function combine(self $values): self
     {
-        $combined = array_combine($this->items, $values->items());
+        $combined = array_combine($this->items, $values->items()); // @phpstan-ignore argument.type, argument.type
 
-        return new self($combined);
+        return new self($combined); // @phpstan-ignore argument.type
     }
 
     public function contains(mixed $value): bool
@@ -104,7 +104,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
     public function countValues(): self
     {
         /** @var array<int|string, int<1, max>> $counted */
-        $counted = array_count_values($this->items);
+        $counted = array_count_values($this->items); // @phpstan-ignore argument.type
 
         return new self($counted);
     }
@@ -122,7 +122,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
     public function diff(self ...$collections): self
     {
         return new self(
-            array_diff($this->items, ...array_map(static fn ($collection) => $collection->items, $collections))
+            array_diff($this->items, ...array_map(static fn ($collection) => $collection->items, $collections)) // @phpstan-ignore argument.type
         );
     }
 
@@ -134,7 +134,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
     public function diffAssoc(self ...$collections): self
     {
         return new self(
-            array_diff_assoc(
+            array_diff_assoc( // @phpstan-ignore argument.type
                 $this->items,
                 ...array_map(static fn ($collection) => $collection->items, $collections)
             )
@@ -190,6 +190,8 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
     }
 
     /**
+     * @param TValue $value
+     *
      * @return self<int, TValue>
      */
     public function fill(int $startIndex, int $count, mixed $value): self
@@ -199,6 +201,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * @param array<int, int|string> $keys
+     * @param TValue                 $value
      *
      * @return self<int|string, TValue>
      */
@@ -227,7 +230,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function flip(): self
     {
-        return new self(array_flip($this->items));
+        return new self(array_flip($this->items)); // @phpstan-ignore argument.type, argument.type
     }
 
     public function getIterator(): \Traversable
@@ -248,7 +251,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
     public function intersect(self ...$collections): self
     {
         return new self(
-            array_intersect(
+            array_intersect( // @phpstan-ignore argument.type
                 $this->items,
                 ...array_map(static fn ($collection) => $collection->items(), $collections)
             )
@@ -263,7 +266,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
     public function intersectAssoc(self ...$collections): self
     {
         return new self(
-            array_intersect_assoc(
+            array_intersect_assoc( // @phpstan-ignore argument.type
                 $this->items,
                 ...array_map(static fn ($collection) => $collection->items(), $collections)
             )
@@ -323,7 +326,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
         return key($this->items);
     }
 
-    public function keyExists(mixed $key): bool
+    public function keyExists(int|string $key): bool
     {
         return array_key_exists($key, $this->items);
     }
@@ -394,19 +397,22 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
         );
     }
 
-    public function multisort(mixed $sortOrder = SORT_ASC, mixed $sortFlags = SORT_REGULAR, mixed ...$rest): void
+    /**
+     * @param array<array-key, mixed>|int ...$rest
+     */
+    public function multisort(int $sortOrder = SORT_ASC, int $sortFlags = SORT_REGULAR, array|int ...$rest): void
     {
         array_multisort($this->items, $sortOrder, $sortFlags, ...$rest);
     }
 
     public function natcasesort(): void
     {
-        natcasesort($this->items);
+        natcasesort($this->items); // @phpstan-ignore argument.type
     }
 
     public function natsort(): void
     {
-        natsort($this->items);
+        natsort($this->items); // @phpstan-ignore argument.type
     }
 
     public function next(): mixed
@@ -540,7 +546,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 
     public function rsort(int $sortFlags = SORT_REGULAR): void
     {
-        rsort($this->items, $sortFlags);
+        rsort($this->items, $sortFlags); // @phpstan-ignore argument.type
     }
 
     public function search(mixed $needle, bool $strict = false): int|string|false
@@ -568,7 +574,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 
     public function sort(int $sortFlags = SORT_REGULAR): void
     {
-        sort($this->items, $sortFlags);
+        sort($this->items, $sortFlags); // @phpstan-ignore argument.type
     }
 
     public function splice(int $offset, ?int $length = null, mixed $replacement = []): void
@@ -653,7 +659,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 
     public function unique(int $sortFlags = SORT_STRING): void
     {
-        $this->items = array_unique($this->items, $sortFlags);
+        $this->items = array_unique($this->items, $sortFlags); // @phpstan-ignore argument.type
     }
 
     public function unshift(mixed ...$values): int

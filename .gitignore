@@ -3,5 +3,6 @@
 vendor
 .php-cs-fixer.cache
 clover.xml
+badge-coverage.svg
 composer.lock
 .mtdocker/
