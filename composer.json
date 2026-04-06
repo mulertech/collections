@@ -4,6 +4,9 @@
   "type": "library",
   "keywords": ["php", "collections", "typed", "data-structures"],
   "minimum-stability": "stable",
+  "config": {
+    "sort-packages": true
+  },
   "license": "MIT",
   "authors": [
     {
